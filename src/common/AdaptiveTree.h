@@ -656,7 +656,9 @@ protected:
   virtual void StartUpdateThread();
   virtual void RefreshLiveSegments(){};
 
+public:
   uint32_t updateInterval_{~0U};
+protected:
   std::mutex treeMutex_, updateMutex_;
   std::condition_variable updateVar_;
   std::thread* updateThread_{0};

@@ -179,6 +179,9 @@ void AdaptiveStream::worker()
       //! based on segment duration / playlist updates timing
       size_t maxAttempts = isLive ? 10 : 6;
       std::chrono::milliseconds msSleep = isLive ? 1000ms : 500ms;
+      uint32_t updateInterval = tree_.updateInterval_;
+      if (isLive && updateInterval != 0 && updateInterval != ~0U)
+        msSleep = std::chrono::milliseconds(updateInterval / 2);
 
       //! @todo: Some streaming software offers subtitle tracks with missing fragments, usually live tv
       //! When a programme is broadcasted that has subtitles, subtitles fragments are offered,
