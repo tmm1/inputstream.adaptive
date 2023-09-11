@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.10)
+project(cdm_aarch64_loader)
+
+add_library(cdm_aarch64_loader SHARED
+  cdm_loader.h
+)
+
+set_target_properties(cdm_aarch64_loader PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(cdm_aarch64_loader PROPERTIES POSITION_INDEPENDENT_CODE True)

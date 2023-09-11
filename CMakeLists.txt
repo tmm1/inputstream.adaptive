@@ -68,6 +68,16 @@ endforeach()
 get_property(DEPS_NAMES_LIST GLOBAL PROPERTY GlobalDepsNamesList)
 list(APPEND DEPLIBS ${DEPS_NAMES_LIST})
 
+# Add additional shared dependencies
+get_property(DEPS_FOLDERS_LIST GLOBAL PROPERTY GlobalSharedDepsFoldersList)
+foreach(DEP_FOLDER ${DEPS_FOLDERS_LIST})
+  add_subdirectory(${DEP_FOLDER})
+endforeach()
+get_property(DEPS_NAMES_LIST GLOBAL PROPERTY GlobalSharedDepsNamesList)
+foreach(DEP_NAME ${DEPS_NAMES_LIST})
+  list(APPEND ADP_ADDITIONAL_BINARY $<TARGET_FILE:${DEP_NAME}>)
+endforeach()
+
 build_addon(inputstream.adaptive ADP DEPLIBS)
 
 if(NOT CMAKE_CROSSCOMPILING AND BUILD_TESTING)
