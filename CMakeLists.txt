@@ -26,6 +26,7 @@ if(WIN32)
   list(APPEND DEPLIBS ${dlfcn-win32_LIBRARIES})
   include_directories(${dlfcn-win32_INCLUDE_DIRS})
 else()
+  list(APPEND DEPLIBS ${CMAKE_DL_LIBS})
   # Required on some old linux platforms to use macro like PRIu64
   add_definitions(-D__STDC_FORMAT_MACROS)
 endif()
