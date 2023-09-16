@@ -17,6 +17,12 @@
 
 #include <kodi/Filesystem.h>
 
+#if defined(__linux__)
+#if defined(__aarch64__) || defined(__arm64__)
+#include <dlfcn.h>
+#endif
+#endif
+
 using namespace DRM;
 using namespace UTILS;
 using namespace kodi::tools;
