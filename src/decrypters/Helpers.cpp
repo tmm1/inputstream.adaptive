@@ -129,7 +129,7 @@ std::vector<uint8_t> DRM::ConvertKidStrToBytes(std::string_view kidStr)
 {
   if (kidStr.size() != 32)
   {
-    LOG::LogF(LOGERROR, "Cannot convert KID \"%s\" as bytes due to wrong size", kidStr.data());
+    LOG::LogF(LOGERROR, "Cannot convert KID \"%s\" as bytes due to wrong size (%zu)", kidStr.data(), kidStr.size());
     return {};
   }
 
