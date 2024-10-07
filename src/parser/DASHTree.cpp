@@ -1718,6 +1718,11 @@ void adaptive::CDashTree::OnUpdateSegments()
                   LOG::LogF(LOGDEBUG,
                             "MPD update - No new segments (repr. id \"%s\", period id \"%s\")",
                             repr->GetId().data(), period->GetId().data());
+                  if (repr->IsWaitForSegment() &&
+                      period->GetId() != m_periods.back()->GetId())
+                  {
+                    repr->SetIsWaitForSegment(false);
+                  }
                   continue;
                 }
 
@@ -1764,7 +1769,9 @@ void adaptive::CDashTree::OnUpdateSegments()
                 }
               }
 
-              if (repr->IsWaitForSegment() && repr->GetNextSegment())
+              if (repr->IsWaitForSegment() &&
+                  (repr->GetNextSegment() ||
+                   period->GetId() != m_periods.back()->GetId()))
               {
                 repr->SetIsWaitForSegment(false);
                 LOG::LogF(LOGDEBUG, "End WaitForSegment repr. id %s", repr->GetId().data());
