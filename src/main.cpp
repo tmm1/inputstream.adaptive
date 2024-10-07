@@ -450,7 +450,7 @@ DEMUX_PACKET* CInputStreamAdaptive::DemuxRead(void)
     for (unsigned int i(1);
          i <= INPUTSTREAM_MAX_STREAM_COUNT && i <= m_session->GetStreamCount(); ++i)
       EnableStream(i + m_session->GetPeriodId() * 1000, false);
-    m_session->InitializePeriod();
+    m_session->InitializePeriod(true);
     DEMUX_PACKET* p = AllocateDemuxPacket(0);
     p->iStreamId = DEMUX_SPECIALID_STREAMCHANGE;
     LOG::Log(LOGDEBUG, "DEMUX_SPECIALID_STREAMCHANGE (chapter changed)");
