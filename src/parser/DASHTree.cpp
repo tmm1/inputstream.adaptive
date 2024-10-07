@@ -1715,13 +1715,15 @@ void adaptive::CDashTree::OnUpdateSegments()
                 if (repr->Timeline().GetInitialSize() == updRepr->Timeline().GetSize() &&
                     repr->Timeline().Get(0)->startPTS_ == updRepr->Timeline().Get(0)->startPTS_)
                 {
-                  LOG::LogF(LOGDEBUG,
-                            "MPD update - No new segments (repr. id \"%s\", period id \"%s\")",
-                            repr->GetId().data(), period->GetId().data());
+                  if (repr->IsWaitForSegment())
+                    LOG::LogF(LOGDEBUG,
+                              "MPD update - No new segments (repr. id \"%s\", period id \"%s\")",
+                              repr->GetId().data(), period->GetId().data());
                   if (repr->IsWaitForSegment() &&
                       period->GetId() != m_periods.back()->GetId())
                   {
                     repr->SetIsWaitForSegment(false);
+                    LOG::LogF(LOGDEBUG, "End WaitForSegment (no new) repr. id \"%s\" period id \"%s\" != \"%s\"", repr->GetId().data(), period->GetId().data(), m_periods.back()->GetId().data());
                   }
                   continue;
                 }
@@ -1774,7 +1776,7 @@ void adaptive::CDashTree::OnUpdateSegments()
                    period->GetId() != m_periods.back()->GetId()))
               {
                 repr->SetIsWaitForSegment(false);
-                LOG::LogF(LOGDEBUG, "End WaitForSegment repr. id %s", repr->GetId().data());
+                LOG::LogF(LOGDEBUG, "End WaitForSegment repr. id %s period id \"%s\" ?= \"%s\"", repr->GetId().data(), period->GetId().data(), m_periods.back()->GetId().data());
               }
 
               m_totalTime = updateTree->m_totalTime;

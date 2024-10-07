@@ -204,14 +204,20 @@ namespace adaptive
       if (segPeriod->GetDuration() > 0 && segPeriod->GetStart() != NO_VALUE)
       {
         const uint64_t pDurMs = segPeriod->GetDuration() * 1000 / segPeriod->GetTimescale();
-        const uint64_t pEndPtsMs = segPeriod->GetStart() + pDurMs;
+        const uint64_t pStartPtsMs = segPeriod->GetStart() * 1000 / segPeriod->GetTimescale();
+        const uint64_t pEndPtsMs = pStartPtsMs + pDurMs;
 
-        const uint64_t segEndPtsMs = segment->m_endPts * 1000 / segRep->GetTimescale();
+        uint64_t segEndPtsMs = segment->m_endPts * 1000 / segRep->GetTimescale();
+        if (segEndPtsMs < pStartPtsMs)
+          segEndPtsMs += pStartPtsMs;
+        //const CSegment* lastSeg = segRep->Timeline().GetBack();
+        bool isLastSegment = segEndPtsMs >= pEndPtsMs; // || (segEndPtsMs >= pStartPtsMs*0.90 && segment == lastSeg);
 
-        LOG::LogF(LOGDEBUG, "Check for last segment (period end PTS: %llu, segment end PTS: %llu)",
-                  pEndPtsMs, segEndPtsMs);
+        LOG::LogF(LOGDEBUG,
+                  "Check for last segment (period id \"%s\", period start PTS: %llu, period end PTS: %llu, segment end PTS: %llu): %s",
+                  segPeriod->GetId().data(), pStartPtsMs, pEndPtsMs, segEndPtsMs, isLastSegment ? "true" : "false");
 
-        return segEndPtsMs >= pEndPtsMs;
+        return isLastSegment;
       }
     }
     else
