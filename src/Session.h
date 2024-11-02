@@ -136,10 +136,7 @@ public:
    *  \param index The index (psshSet number) of the cdm session
    *  \return The single sample decrypter
    */
-  Adaptive_CencSingleSampleDecrypter* GetSingleSampleDecryptor(unsigned int index) const
-  {
-    return m_cdmSessions[index].m_cencSingleSampleDecrypter;
-  }
+  Adaptive_CencSingleSampleDecrypter* GetSingleSampleDecryptor(unsigned int index) const;
 
   /*! \brief Get the decrypter (DRM lib)
    *  \return The decrypter
@@ -318,6 +315,14 @@ public:
    *  \param adStream The adaptive stream on which the stream has changed
    */
   void OnStreamChange(adaptive::AdaptiveStream* adStream) override;
+
+  /*!
+   * \brief Callback from CInputStreamAdaptive::GetStream.
+   * \param streamid The requested stream id
+   * \param info The stream info object (can be updated)
+   * \return True to allow Kodi core to load the stream, otherwise false
+   */
+  bool OnGetStream(int streamid, kodi::addon::InputstreamInfo& info);
 
 protected:
   /*! \brief Check for and load decrypter module matching the supplied key system
